@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Advanced Search</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+		<link rel="stylesheet" href="styles.css">
+		<style type="text/css">
+			.appbar {
+				padding-left: 3%;
+				color: red;
+				font-size: 24px;
+			}
+			.advanced {
+				padding-left: 3%;
+				font-size: 15px;
+			}
+			#adv-button {
+				background-color: rgb(66,133,244);
+				color: white;
+				font-size: 13px;
+				font-weight: bolder;
+				padding: 8px 20px;
+				border: 1px solid rgb(66,133,274);
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+			<div class="d-flex justify-content-end">
+				<div class="p-3">
+					<a href="index.html">Google Search</a>
+				</div>
+			</div>
+
+			<div class="appbar">
+				<label>Advanced Search</label>
+			</div>
+			
+			<hr><br>
+
+			<div class="advanced">
+				<form action="https://google.com/search">
+					<div class="form-group row">
+						<label class="col-2 col-form-label">Find pages with...</label>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-2 col-form-label">all these words:</label>
+						<div class="col-6">
+							<input class="form-control" type="text" name="as_q">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-2 col-form-label">this exact word or phrase:</label>
+						<div class="col-6">
+							<input class="form-control" type="text" name="as_epq">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-2 col-form-label">any of these words:</label>
+						<div class="col-6">
+							<input class="form-control" type="text" name="as_oq">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-2 col-form-label">none of these words:</label>
+						<div class="col-6">
+							<input class="form-control" type="text" name="as_eq">
+						</div>
+					</div>
+
+					<div class="form-group row" style="padding-left: 130px;">
+							<button class="offset-6" id="adv-button" type="submit">Advanced Search</button>
+					</div>
+
+				</form>
+			</div>
+
+	</body>
+</html>
