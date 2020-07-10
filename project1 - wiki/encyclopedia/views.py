@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from . import util
+from markdown2 import markdown
 from random import choice
 
 
@@ -15,7 +16,7 @@ def get_title(request, title):
 	if entry is None:
 		return HttpResponse("<h1>Error: Requested Page Not Found!<h1>")
 	args = {'title': title}
-	args.update({'entry': entry})
+	args.update({'entry': markdown(entry)})
 	return render(request, "encyclopedia/entry.html", args)
 
 def search(request):
@@ -43,8 +44,14 @@ def create(request):
 			return redirect('title', title)
 
 def edit(request, title):
-	print(title)
-	return HttpResponse("Under Development")
+	if request.method == "GET":
+		args = {'title': title}
+		args.update({'content': util.get_entry(title)})
+		return render(request, "encyclopedia/edit.html", args)
+	else:
+		content = request.POST.get('content')
+		util.save_entry(title, content)
+		return redirect('title', title)
 
 def random(request):
 	return redirect('title', choice(util.list_entries()))
