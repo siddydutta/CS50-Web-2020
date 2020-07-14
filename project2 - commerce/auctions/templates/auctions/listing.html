@@ -1,0 +1,104 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <h2>Listing: {{ listing.title }}</h2>
+
+    <!-- Watchlist Functionality -->
+    {% if user.is_authenticated %}
+        <form method="post">{% csrf_token %}
+            {% if watch %}
+                <button name="watchlist" value="{{ watch.0.id }}" type="submit">Remove from Watchlist</button>
+            {% else %}
+                <button name="watchlist" value="add" type="submit">Add to Watchlist</button>
+            {% endif %}
+        </form>
+    {% endif %}
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-2">
+                <img src="{{ listing.image_url }}" height="500" width="500">
+            </div>
+
+            <div class="col-6 offset-4">
+                <p>{{ listing.description }}</p>
+                <p>Category: {{ listing.category }}</p>
+                {% if bids|length == 0 %}
+                    <p>Starting Bid: $ {{ listing.start_bid }}</p>
+                {% else %}
+                    <p>Current Bid: $ {{ max_bid }}</p>
+                {% endif %}
+                <p>Number of Bids: {{ bids|length }}</p>
+
+                <!-- Place Bid Functionality -->
+                {% if user.is_authenticated and listing.active %}
+                    <form method="post"> {% csrf_token %}
+                        <div class="form-group row">
+                            <label class="col-3 col-form-label">Place Bid: </label>
+                            <div class="col-4">
+                                <input class="form-control" type="number" name="bid-value" required min="0" step="0.01">
+                            </div>
+                            <button class="col-2 btn-primary" name="bid" value="true">Bid!</button>
+                        </div>
+                    </form>
+                {% endif %}
+
+                <div>
+                    <p>Created By: {{ listing.creator }}</p>   
+                    {% if listing.creator == user and listing.active %}
+                        <form method="post"> {% csrf_token %}
+                            <button class="col-4 btn-warning" name="close" value="true">Close Listing</button>
+                        </form>
+                    {% endif %}
+                    {% if not listing.active %}
+                        <p>Listing Closed!</p>
+                        {% if win_bid %}
+                            <p>Winner: {{ win_bid.userID }}</p>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Commenting Functionality -->
+    <div>
+        <h3>Comments</h3>
+        <div class="container">
+            {% for comment in comments %}
+                <div class="row">
+                    <div class="col-1">
+                        {{ comment.userID }}
+                    </div>
+                    <div class="col-8">
+                        {{ comment.comment}}
+                    </div>
+                </div>
+            {% endfor %}
+            {% if user.is_authenticated %}
+                <div class="row">
+                    <form method="post" class="col-12">{% csrf_token %}
+                        <div class="form-group row">
+                            <label class="col-1 col-form-label">{{ user }} </label>
+                            <div class="col-8">
+                                <input class="form-control" type="text" name="comment">
+                            </div>
+                            <button class="col-2 btn-primary" name="add-comment" value="true">Add Comment!</button>
+                        </div>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+
+{% endblock %}
