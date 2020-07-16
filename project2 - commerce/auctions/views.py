@@ -12,7 +12,6 @@ from .models import User, Listing, Bid, Watchlist, Comment
 
 def index(request):
     listings = Listing.objects.filter(active=True)
-    print(listings)
     return render(request, "auctions/index.html", {'listings': listings})
 
 
@@ -170,3 +169,19 @@ def listing(request, id):
             messages.error(request, "Invalid request")
         listing_url = reverse('listing', args=[id])
         return HttpResponseRedirect(listing_url)
+
+@login_required(login_url='login')
+def watchlist(request):
+    watchlist = Watchlist.objects.filter(userID=request.user)
+    args = {'watchlist': watchlist}
+    return render(request, "auctions/watchlist.html", args)
+
+def categories(request, category=None):
+    if category is None:
+        args = {'categories': [cat[0] for cat in Listing.CATEGORIES]}
+        return render(request, "auctions/categories.html", args)
+    else:
+        args = {'category': category}
+        category_listings = Listing.objects.filter(category=category, active=True)
+        args.update({'listings': category_listings})
+        return render(request, "auctions/category.html", args)
